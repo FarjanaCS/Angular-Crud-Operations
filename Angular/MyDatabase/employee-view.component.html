@@ -1,0 +1,57 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>Employee List</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="right">
+            <a [routerLink]="['/employee-add']" mat-mini-fab><mat-icon>add</mat-icon></a>
+        </div>
+        <mat-table [dataSource]="dataSource" matSort>
+            <ng-container matColumnDef="picture" >
+                <mat-header-cell *matHeaderCellDef ></mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    <img src="{{imgPath}}/{{element.picture}}" class="circle-image" />
+                </mat-cell>
+    
+            </ng-container>
+            <ng-container matColumnDef="employeeName" >
+                <mat-header-cell *matHeaderCellDef>Employee Name</mat-header-cell>
+                <mat-cell *matCellDef="let element" mat-sort-header>{{element.employeeName}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="gender" >
+                <mat-header-cell *matHeaderCellDef>Gender</mat-header-cell>
+                <mat-cell *matCellDef="let element" mat-sort-header>{{getGender( element.gender)}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="joiningDate" >
+                <mat-header-cell *matHeaderCellDef>Joining Date</mat-header-cell>
+                <mat-cell *matCellDef="let element" mat-sort-header>{{element.joiningDate|date:'MMM-yyyy'}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="salary" >
+                <mat-header-cell *matHeaderCellDef>Salary</mat-header-cell>
+                <mat-cell *matCellDef="let element" mat-sort-header>{{element.salary|number:'2.2-2'}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="isaCurrentEmployee" >
+                <mat-header-cell *matHeaderCellDef>Is a Current Employee?</mat-header-cell>
+                <mat-cell *matCellDef="let element" mat-sort-header>{{element.isaCurrentEmployee ? 'Yes': 'No'}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="qualifications" >
+                <mat-header-cell *matHeaderCellDef>Qualifications</mat-header-cell>
+                <mat-cell *matCellDef="let element" mat-sort-header>
+                    <button mat-icon-button (click)="showQualification(element.employeeId)"><mat-icon>image_aspect_ratio</mat-icon></button>
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="actions" >
+                <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+                <mat-cell *matCellDef="let element" mat-sort-header>
+                    <a type="button" color="primary" mat-icon-button [routerLink]="['/employee-edit', element.employeeId]"><mat-icon>edit</mat-icon></a>
+                    <button type="button" color="warn" mat-icon-button (click)="deleteEmployee(element)"><mat-icon>delete</mat-icon></button>
+                </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+
+        </mat-table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="5" showFirstLastButtons></mat-paginator>
+
+    </mat-card-content>
+</mat-card>

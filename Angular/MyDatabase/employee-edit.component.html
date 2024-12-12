@@ -1,0 +1,134 @@
+<mat-card class="medium-container">
+    <mat-card-header>
+      <mat-card-title>Edit Employee</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="employeeForm" (ngSubmit)="save()">
+        <mat-form-field class="f-w">
+          <mat-label>Employee name</mat-label>
+          <input type="text" matInput formControlName="employeeName" />
+          @if(f['employeeName'].hasError('required')){
+          <mat-error>Employee Name is <strong>required</strong></mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field class="f-w">
+          <mat-label>Gender </mat-label>
+          <mat-select formControlName="gender">
+            @for (op of typeOptions; track op) {
+            <mat-option [value]="op.value">{{ op.label }}</mat-option>
+            }
+           
+          </mat-select>
+          @if(f['gender'].hasError('required')){
+          <mat-error>Gender is <strong>required</strong></mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field class="f-w">
+          <mat-label>Joining Date</mat-label>
+          <input
+            matInput
+            formControlName="joiningDate"
+            [matDatepicker]="picker"
+          />
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          @if(f['joiningDate'].hasError('required')){
+          <mat-error>Joining Date is <strong>required</strong></mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field class="f-w">
+          <mat-label>Salary</mat-label>
+          <input type="number" matInput formControlName="salary" />
+          @if(f['salary'].hasError('required')){
+          <mat-error>Salary is <strong>required</strong></mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field class="f-w">
+          <mat-label>Picture</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="picture"
+            [readonly]="true"
+          />
+          <button
+            type="button"
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
+            (click)="pic.click()"
+          >
+            <mat-icon>photo</mat-icon>
+          </button>
+          @if(f['picture'].hasError('required')){
+          <mat-error>Picture is <strong>required</strong></mat-error>
+          }
+        </mat-form-field>
+        <div class="f-w">
+          <mat-label>isaCurrentEmployee?</mat-label>
+          <mat-checkbox formControlName="isaCurrentEmployee"></mat-checkbox>
+          @if(f['isaCurrentEmployee'].hasError('required')){
+          <mat-error>Checkbox is <strong>required</strong></mat-error>
+          }
+        </div>
+        <div class="add-row">
+          <h3>Add Qualification</h3>
+          <button
+            (click)="addQualification()"
+            type="button"
+            mat-icon-button
+            color="accent"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+        <ng-container formArrayName="qualifications">
+          @for(fld of qualifications.controls;track fld;let i = $index){
+          <div [formGroupName]="i" class="ql-row">
+            <mat-form-field class="f-w">
+              <mat-label>passingYear</mat-label>
+              <input type="text" matInput formControlName="passingYear" />
+              @if(qualifications.controls[i].get('passingYear')?.hasError('required')){
+              <mat-error>passingYear is <strong>required</strong></mat-error>
+              }
+            </mat-form-field>
+            <mat-form-field class="f-w">
+              <mat-label>degree</mat-label>
+              <input type="text" matInput formControlName="degree" />
+              @if(qualifications.controls[i].get('degree')?.hasError('required')){
+              <mat-error>degree is <strong>required</strong></mat-error>
+              }
+            </mat-form-field>
+            <div>
+              <button
+                (click)="removeQualification(i)"
+                type="button"
+                mat-icon-button
+                color="warn"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+          }
+        </ng-container>
+        <div class="f-w">
+          <button mat-raised-button type="submit" color="primary" [disabled]="employeeForm.invalid">Save</button>
+        </div>
+        <input
+          type="file"
+          [hidden]="true"
+          #pic
+          (change)="pictureChanged($event)"
+        />
+      </form>
+     <!--  {{employeeForm.value|json}} -->
+    </mat-card-content>
+    <mat-card-actions>
+      <a mat-button [routerLink]="['/employees']">Back to list</a>
+    </mat-card-actions>
+  </mat-card>
+  
